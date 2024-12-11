@@ -28,7 +28,7 @@ function ensureAuthenticated(
     } = verify(token, authConfig.jwt.secret) as TokenPayload
 
     request.user = {
-      id: user_id,
+      id: Number(user_id),
       role,
     }
 
