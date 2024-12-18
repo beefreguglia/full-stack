@@ -3,7 +3,29 @@ import { Request, Response } from 'express'
 import { z } from 'zod'
 
 class TasksController {
-  index() {}
+  async index(request: Request, response: Response) {
+    const taskParamsSchema = z.object({
+      teamId: z.coerce.number(),
+    });
+    
+    const { teamId } = taskParamsSchema.parse(request.params);
+    console.log(teamId)
+    const tasks = await prisma.task.findMany({
+      where: { teamId },
+      include: {
+        user: { 
+          select: {
+            name: true,
+            email: true,
+          }
+        }
+      }
+    })
+
+    console.log(tasks)
+
+    return response.json({ tasks })
+  }
 
   async create(request: Request, response: Response) {
     const taskBodySchema = z.object({
