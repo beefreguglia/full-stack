@@ -9,17 +9,9 @@ class TasksController {
     });
     
     const { teamId } = taskParamsSchema.parse(request.params);
-    console.log(teamId)
+    
     const tasks = await prisma.task.findMany({
-      where: { teamId },
-      include: {
-        user: { 
-          select: {
-            name: true,
-            email: true,
-          }
-        }
-      }
+      where: { teamId }
     })
 
     console.log(tasks)
