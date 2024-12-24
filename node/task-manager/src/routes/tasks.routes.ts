@@ -1,11 +1,20 @@
 
 import { TasksController } from "@/controllers/tasks.controller";
+import { ensureAuthenticated } from "@/middlewares/ensure-authenticated";
 import { Router } from "express";
 
-const tasksRoutes = Router()
-const tasksController = new TasksController()
+const tasksRoutes = Router();
+const tasksController = new TasksController();
 
-tasksRoutes.get("/:teamId", tasksController.index)
-tasksRoutes.post("/:teamId", tasksController.create)
+tasksRoutes.use(ensureAuthenticated)
+
+tasksRoutes.get("/:teamId", tasksController.index);
+tasksRoutes.post("/:teamId", tasksController.create);
+tasksRoutes.get("/:taskId/team/:teamId", tasksController.get);
+tasksRoutes.put("/:taskId", tasksController.update);
+tasksRoutes.patch("/:taskId/status/in_progress", tasksController.changeToInProgress);
+tasksRoutes.patch("/:taskId/status/pending", tasksController.changeToPending);
+tasksRoutes.patch("/:taskId/status/completed", tasksController.changeToCompleted);
+tasksRoutes.delete("/:taskId", tasksController.delete);
 
 export { tasksRoutes }

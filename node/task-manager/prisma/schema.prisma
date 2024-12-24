@@ -51,10 +51,10 @@ model TeamMember {
   id        Int      @id @default(autoincrement())
   createdAt DateTime @default(now()) @map("created_at")
 
-  user   User @relation(fields: [userId], references: [id])
+  user   User @relation(fields: [userId], references: [id], onDelete: Cascade)
   userId Int  @map("user_id")
 
-  team   Team @relation(fields: [teamId], references: [id])
+  team   Team @relation(fields: [teamId], references: [id], onDelete: Cascade)
   teamId Int  @map("team_id")
 
   @@map("team_members")
@@ -84,7 +84,7 @@ model Task {
   user       User @relation(fields: [assignedTo], references: [id])
   assignedTo Int  @map("assigned_to")
 
-  team   Team @relation(fields: [teamId], references: [id])
+  team   Team @relation(fields: [teamId], references: [id], onDelete: Cascade)
   teamId Int  @map("team_id")
 
   TaskHistory TaskHistory[]
@@ -98,10 +98,10 @@ model TaskHistory {
   newStatus TaskStatus @map("new_status")
   changedAt DateTime   @default(now()) @map("changed_at")
 
-  task   Task @relation(fields: [taskId], references: [id])
+  task   Task @relation(fields: [taskId], references: [id], onDelete: Cascade)
   taskId Int  @map("task_id")
 
-  user      User @relation(fields: [changedBy], references: [id])
+  user      User @relation(fields: [changedBy], references: [id], onDelete: Cascade)
   changedBy Int  @map("changed_by")
 
   @@map("task_histories")

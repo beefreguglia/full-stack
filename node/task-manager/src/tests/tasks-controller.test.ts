@@ -4,12 +4,12 @@ import { app } from "@/app"
 import { prisma } from "@/database/prisma"
 
 describe("TasksController", () => {
-  let user_id: number
-  let team_id: number
-  let task_id: number
-  let task_id2: number
-  let task_id3: number
-  let task_id4: number
+  let user_id: number | undefined
+  let team_id: number | undefined
+  let task_id: number | undefined
+  let task_id2: number | undefined
+  let task_id3: number | undefined
+  let task_id4: number | undefined
   let token: string = ''
 
   afterAll(async() => {
@@ -25,11 +25,11 @@ describe("TasksController", () => {
     if(task_id4) {
       await prisma.task.delete({ where: { id: task_id4 } })
     }
-    if(user_id) {
-      await prisma.user.delete({ where: { id: user_id } })
-    }
     if(team_id) {
       await prisma.team.delete({ where: { id: team_id } })
+    }
+    if(user_id) {
+      await prisma.user.delete({ where: { id: user_id } })
     }
   })
 
@@ -73,7 +73,7 @@ describe("TasksController", () => {
     expect(taskCreated.body.task.description).toEqual('Task description');
   })
   
-  it('should be able to show all tasks created by clinic', async () => {
+  it('should be able to show all tasks created by team', async () => {
     const taskCreated2 = await request(app).post(`/tasks/${team_id}`)
       .send({
         title: 'Task title 2',
@@ -123,5 +123,49 @@ describe("TasksController", () => {
         title: 'Task title 4'
       }),
     ]);
+  })
+
+  it('should be able to show a created task by team id and task id', async () => {
+    const taskResponse = await request(app)
+      .get(`/tasks/${task_id}/team/${team_id}`)
+      .set('Authorization', `Bearer ${token}`);
+  
+   
+    expect(taskResponse.status).toBe(200);
+    expect(taskResponse.body.task.title).toEqual('Task title 1');
+  })
+
+  it('should be able to update a task to in progress status', async () => {
+    const taskResponse = await request(app)
+      .patch(`/tasks/${task_id}/status/in_progress`)
+      .set('Authorization', `Bearer ${token}`);
+
+    expect(taskResponse.status).toBe(204);
+  })
+
+  it('should be able to update a task to pending status', async () => {
+    const taskResponse = await request(app)
+      .patch(`/tasks/${task_id}/status/pending`)
+      .set('Authorization', `Bearer ${token}`);
+
+    expect(taskResponse.status).toBe(204);
+  })
+
+  it('should be able to update a task to completed status', async () => {
+    const taskResponse = await request(app)
+      .patch(`/tasks/${task_id}/status/completed`)
+      .set('Authorization', `Bearer ${token}`);
+
+    expect(taskResponse.status).toBe(204);
+  })
+
+  it('should be able to delete a task', async () => {
+    const taskResponse = await request(app)
+      .delete(`/tasks/${task_id}`)
+      .set('Authorization', `Bearer ${token}`);
+    
+    task_id = undefined
+
+    expect(taskResponse.status).toBe(204);
   })
 })

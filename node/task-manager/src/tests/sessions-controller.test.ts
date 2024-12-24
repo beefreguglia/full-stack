@@ -31,14 +31,6 @@ describe("SessionsController", () => {
   })
 
   it('should throw an invalid credentials error if email is invalid', async () => {
-    const createdUserResponse = await request(app).post("/users").send({
-      name: 'Auth Test User',
-      email: 'authtestuser@example.com',
-      password: '123456'
-    })
-
-    user_id = createdUserResponse.body.id
-
     const sessionResponse = await request(app).post("/sessions").send({
       email: 'invalid@invalid.com',
       password: '123456'
@@ -49,14 +41,6 @@ describe("SessionsController", () => {
     })
 
   it('should throw an invalid credentials error if password is invalid', async () => {
-    const createdUserResponse = await request(app).post("/users").send({
-      name: 'Auth Test User',
-      email: 'authtestuser@example.com',
-      password: '123456'
-    })
-
-    user_id = createdUserResponse.body.id
-
     const sessionResponse = await request(app).post("/sessions").send({
       email: 'authtestuser@example.com',
       password: 'invalid_password'

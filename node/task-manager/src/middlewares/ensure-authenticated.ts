@@ -31,7 +31,7 @@ function ensureAuthenticated(
       id: Number(user_id),
       role,
     }
-
+    
     return next()
   } catch {
     throw new AppError("Invalid JWT token", 401)
