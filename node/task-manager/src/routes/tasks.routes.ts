@@ -1,12 +1,14 @@
 
 import { TasksController } from "@/controllers/tasks.controller";
 import { ensureAuthenticated } from "@/middlewares/ensure-authenticated";
+import { verifyUserAuthorization } from "@/middlewares/verify-user-authorization";
 import { Router } from "express";
 
 const tasksRoutes = Router();
 const tasksController = new TasksController();
 
 tasksRoutes.use(ensureAuthenticated)
+tasksRoutes.use(verifyUserAuthorization(["ADMIN", "MEMBER"]))
 
 tasksRoutes.get("/:teamId", tasksController.index);
 tasksRoutes.post("/:teamId", tasksController.create);

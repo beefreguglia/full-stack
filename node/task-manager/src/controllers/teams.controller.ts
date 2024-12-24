@@ -18,6 +18,13 @@ class TeamsController {
       }
     });
 
+    await prisma.teamMember.create({
+      data: {
+        teamId: team.id,
+        userId: request.user?.id!,
+      }
+    })
+
     return response.status(201).json({ team });
   }
 }

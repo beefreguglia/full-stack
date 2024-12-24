@@ -24,7 +24,16 @@ describe("TeamsController", () => {
     })
 
     user_id = createdUserResponse.body.id
-
+    
+    await prisma.user.update({
+      data: {
+        role: 'ADMIN'
+      },
+      where: {
+        id: user_id
+      }
+    })
+    
     const sessionResponse = await request(app).post("/sessions").send({
       email: 'authtestuser@example.com',
       password: '123456'
