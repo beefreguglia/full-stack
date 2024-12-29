@@ -1,3 +1,5 @@
+import styles from "./styles.module.css";
+
 import { ComponentProps } from "react";
 
 type ButtonProps = ComponentProps<"button"> & {
@@ -5,5 +7,7 @@ type ButtonProps = ComponentProps<"button"> & {
 }
 
 export function Button({ name, ...rest }: ButtonProps) {
-  return <button {...rest}>{name}</button>
+  return <button className={styles.container} {...rest}>
+    <span>{name}</span>
+  </button>
 }
