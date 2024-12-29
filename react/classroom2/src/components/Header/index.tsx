@@ -10,7 +10,7 @@ type HeaderProps = {
 
 export function Header({ current, max, onRestart }: HeaderProps) {
   return (
-    <div className={styles.container}>
+    <div className={styles.header}>
       <img src={logo} alt="Logo" />
 
       <header>
