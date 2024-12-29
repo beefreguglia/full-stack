@@ -1,4 +1,5 @@
 import styles from './app.module.css'
+import { Button } from './components/Button'
 
 import { Header } from "./components/Header"
 import { Letter } from './components/Letter'
@@ -20,6 +21,10 @@ function App() {
           <Letter value='A' />
           <Letter value='C' />
           <Letter value='T' />
+        </div>
+        <h4>Palpites</h4>
+        <div className={styles.guess}>
+          <Button title='Confirmar' />
         </div>
       </main>
     </div>
