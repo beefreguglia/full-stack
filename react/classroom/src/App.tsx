@@ -1,6 +1,6 @@
 import "./global.css";
 
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { Button } from "./components/button";
 
 import styles from "./app.module.css";
@@ -16,9 +16,17 @@ export function App() {
   }
 
   function handleRemove() {
-    setCount(count - 1)
+    if (count > 0) {
+      setCount(count - 1)
+    }
   }
 
+  useEffect(() => {
+    if(count > 0) {
+      console.log('O valor mudou!')
+    }
+  }, [count])
+  
   return (
     <div className={styles.container}>
       <Button name="Adicionar" onClick={handleAdd} />
