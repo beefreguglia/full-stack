@@ -38,3 +38,14 @@ a, button {
 a:hover, button:hover {
   filter: brightness(0.7);
 }
+
+span {
+  color: #3D3D3D;
+  font-weight: 600;
+  font-size: 14;
+}
+
+strong {
+  color: #F24D0D;
+  text-transform: uppercase;
+}
