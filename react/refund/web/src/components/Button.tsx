@@ -24,6 +24,7 @@ export function Button({
       className={
         classMerge([
           "flex items-center justify-center bg-green-100 text-white cursor-pointer hover:bg-green-200 transition ease-linear rounded-lg disabled:opacity-50 disabled:cursor-not-allowed",
+          isLoading && "cursor-progress",
           variants.button[variant],
         ])
       }
