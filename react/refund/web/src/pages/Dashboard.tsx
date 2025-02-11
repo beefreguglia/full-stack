@@ -9,7 +9,7 @@ const REFUND_EXAMPLE = {
   id: "123456789",
   name: "Bernardo",
   category: "Alimentação",
-  amount: "100,00",
+  amount: 35.5,
   categoryImg: CATEGORIES.food.icon,
 }
 export function Dashboard() {
