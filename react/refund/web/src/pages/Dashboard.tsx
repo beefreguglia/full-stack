@@ -38,7 +38,14 @@ export function Dashboard() {
           <img src={searchSvg} alt="Ícone de pesquisar" className="w-5" />
         </Button>
       </form>
-      <div>
+      <div className="mt-6 flex-col gap-4 max-h-[342px] overflow-y-scroll">
+        <RefundItem item={REFUND_EXAMPLE} />
+        <RefundItem item={REFUND_EXAMPLE} />
+        <RefundItem item={REFUND_EXAMPLE} />
+        <RefundItem item={REFUND_EXAMPLE} />
+        <RefundItem item={REFUND_EXAMPLE} />
+        <RefundItem item={REFUND_EXAMPLE} />
+        <RefundItem item={REFUND_EXAMPLE} />
         <RefundItem item={REFUND_EXAMPLE} />
       </div>
     </div>
