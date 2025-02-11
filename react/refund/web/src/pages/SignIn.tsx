@@ -9,6 +9,7 @@ export function SignIn() {
 
   function onSubmit(e: React.FormEvent) {
     e.preventDefault();
+    console.log(email, password)
     alert('Enviado')
   }
 
