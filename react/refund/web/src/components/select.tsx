@@ -11,7 +11,6 @@ export function Select({ legend, children, ...rest }: Props) {
 
       <select 
         className="w-full h-12 rounded-lg border-gray-300 px-4 text-sm border text-gray-100 bg-transparent outline-none focus:border-green-100 placeholder:text-gray-300"
-        value=""
         {...rest}
       >
         <option value="" disabled hidden>Selecione</option>
