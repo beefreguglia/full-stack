@@ -1,5 +1,7 @@
+import "express-async-errors"
 import express from "express"
 import cors from "cors"
+
 import { errorHandling } from "./middlewares/error-handler";
 import { routes } from "./routes";
 
