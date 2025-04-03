@@ -87,6 +87,25 @@ class RefundsController {
         totalPages: totalPages > 0 ? totalPages : 1,
     } })
   }
+  
+  async show(request: Request, response: Response) {
+    const paramsSchema =  z.object({
+      id: z.string().uuid(),
+    })
+
+    const { id } = paramsSchema.parse(request.params)
+
+    const refund = await prisma.refund.findMany({
+      where: {
+        id,
+      },
+      include: {
+        user: true,
+      },
+    })
+
+    response.status(200).json(refund)
+  }
 }
 
 export { RefundsController }
