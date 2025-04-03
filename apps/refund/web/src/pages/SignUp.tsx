@@ -3,6 +3,9 @@ import { z, ZodError } from "zod";
 
 import { Button } from "../components/Button";
 import { Input } from "../components/Input";
+import { api } from "../services/api";
+import { useNavigate } from "react-router";
+import { AxiosError } from "axios";
 
 export function SignUp() {
   const [name, setName] = useState("");
@@ -11,11 +14,13 @@ export function SignUp() {
   const [passwordConfirm, setPasswordConfirm] = useState("");
   const [isLoading, setIsLoading] = useState(false);
 
+  const navigate = useNavigate();
+
   const signUpSchema = z
     .object({
       name: z.string().trim().min(1, "Informe o nome"),
       email: z.string().email({ message: "E-mail inválido" }),
-      password: z.string().min(7, "Senha deve ter pelo menos 7 dígitos"),
+      password: z.string().min(6, "Senha deve ter pelo menos 6 dígitos"),
       passwordConfirm: z.string({ message: "Confirme a senha" }),
     })
     .refine((data) => data.password === data.passwordConfirm, {
@@ -23,7 +28,7 @@ export function SignUp() {
       path: ["passwordConfirm"],
     });
 
-  function onSubmit(e: React.FormEvent) {
+  async function onSubmit(e: React.FormEvent) {
     e.preventDefault();
 
     try {
@@ -35,17 +40,27 @@ export function SignUp() {
         password,
         passwordConfirm,
       });
+
+      await api.post("/users", data);
+
+      if (confirm("Cadastrado com sucesso. Ir para tela de entrar?")) {
+        navigate("/")
+      }
     } catch (error) {
+      console.log(error)
+
       if (error instanceof ZodError) {
         return alert(error.issues[0].message);
+      }
+
+      if (error instanceof AxiosError) {
+        return alert(error.response?.data.message)
       }
 
       alert("Não foi possível cadastrar!");
     } finally {
       setIsLoading(false);
     }
-    console.log(name, email, password, passwordConfirm, isLoading);
-    alert("Enviado");
   }
 
   return (
@@ -73,7 +88,7 @@ export function SignUp() {
       <Input
         required
         legend="Confirmação da senha"
-        type="passwordConfirm"
+        type="password"
         placeholder="123456"
         onChange={(e) => setPasswordConfirm(e.target.value)}
       />
