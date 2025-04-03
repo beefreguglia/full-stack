@@ -44,17 +44,17 @@ export function SignUp() {
       await api.post("/users", data);
 
       if (confirm("Cadastrado com sucesso. Ir para tela de entrar?")) {
-        navigate("/")
+        navigate("/");
       }
     } catch (error) {
-      console.log(error)
+      console.log(error);
 
       if (error instanceof ZodError) {
         return alert(error.issues[0].message);
       }
 
       if (error instanceof AxiosError) {
-        return alert(error.response?.data.message)
+        return alert(error.response?.data.message);
       }
 
       alert("Não foi possível cadastrar!");
