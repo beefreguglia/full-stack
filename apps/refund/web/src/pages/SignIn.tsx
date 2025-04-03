@@ -4,6 +4,7 @@ import { Input } from "../components/Input";
 import { z, ZodError } from "zod";
 import { api } from "../services/api";
 import { AxiosError } from "axios";
+import { useAuth } from "../hooks/useAuth";
 
 const signInSchema = z.object({
   email: z.string().email("E-mail inválido"),
@@ -13,6 +14,8 @@ const signInSchema = z.object({
 export function SignIn() {
   const [state, formAction, isLoading] = useActionState(signIn, null);
 
+  const { save } = useAuth();
+
   async function signIn(_: any, formData: FormData) {
     try {
       const { email, password } = signInSchema.parse({
@@ -20,7 +23,9 @@ export function SignIn() {
         password: formData.get("password"),
       });
 
-      const response = await api.post("/sessions", { email, password });
+      const { data } = await api.post("/sessions", { email, password });
+      save(data);
+
       return { email, password };
     } catch (error) {
       console.log(error);
@@ -45,16 +50,21 @@ export function SignIn() {
         legend="E-mail"
         type="email"
         placeholder="seu@email.com"
-        defaultValue={String(state?.email)}
+        defaultValue={state?.email ? String(state.email) : ""}
       />
-      <p className="text-sm text-red-600 my-4 font-medium">{state?.message}</p>
       <Input
         name="password"
         required
         legend="Senha"
         type="password"
-        defaultValue={String(state?.password)}
+        placeholder="Digite sua senha"
+        defaultValue={state?.password ? String(state.password) : ""}
       />
+      {state?.message && (
+        <p className="text-sm text-red-600 my-4 font-medium">
+          {state?.message}
+        </p>
+      )}
       <Button type="submit" isLoading={isLoading}>
         Entrar
       </Button>
