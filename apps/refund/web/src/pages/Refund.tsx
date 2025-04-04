@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { Input } from "../components/Input";
 import { Select } from "../components/select";
 import { CATEGORIES, CATEGORIES_KEYS } from "../utils/categories";
@@ -9,6 +9,7 @@ import fileSvg from "../assets/file.svg";
 import { z, ZodError } from "zod";
 import { AxiosError } from "axios";
 import { api } from "../services/api";
+import { formatCurrency } from "../utils/formatCurrency";
 
 const refundSchema = z.object({
   name: z.string().trim().min(3, "Informe um nome claro para sua solicitação"),
@@ -25,6 +26,7 @@ export function Refund() {
   const [category, setCategory] = useState("");
   const [file, setFile] = useState<File | null>(null);
   const [isLoading, setIsLoading] = useState(false);
+  const [fileURL, setFileURL] = useState<string | null>(null);
 
   const navigate = useNavigate();
   const { id } = useParams<{ id: string }>();
@@ -77,6 +79,31 @@ export function Refund() {
     }
   }
 
+  async function fetchRefound(id: string) {
+    try {
+      const { data } = await api.get<RefundAPIResponse>(`/refunds/${id}`)
+
+      setName(data.name);
+      setCategory(data.category);
+      setAmount(formatCurrency(data.amount));
+      setFileURL(data.filename)
+    } catch (error) {
+      console.log(error);
+
+      if (error instanceof AxiosError) {
+        return alert(error.response?.data.message);
+      }
+
+      alert("Não foi possível carregar os dados da solicitação");
+    }
+  }
+
+  useEffect(() => {
+    if (id) {
+      fetchRefound(id);
+    }
+  }, [id]);
+
   return (
     <form
       onSubmit={onSubmit}
@@ -119,11 +146,11 @@ export function Refund() {
           disabled={!!id}
         />
       </div>
-      {id ? (
+      {(id && fileURL) ? (
         <a
-          href=""
+          href={`http://localhost:3333/uploads/${fileURL}`}
           target="_blank"
-          className="text-sm text-gray-100 font-semibold flex items-center justify-center gap-2 my-6 hover:opacity-70 transition ease-linear"
+          className="text-sm text-green-100 font-semibold flex items-center justify-center gap-2 my-6 hover:opacity-70 transition ease-linear"
         >
           <img src={fileSvg} alt="Ícone de arquivo" />
           Abrir comprovante

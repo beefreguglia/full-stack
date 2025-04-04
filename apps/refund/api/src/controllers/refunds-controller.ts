@@ -48,15 +48,16 @@ class RefundsController {
 
     const { name, page, perPage } = querySchema.parse(request.query)
 
-    // Calcula valores do skip.
     const skip = (page - 1) * perPage;
 
     const refunds = await prisma.refund.findMany({
       skip,
       take: perPage,
       where: {
-        name: {
-          contains: name,
+        user: {
+          name: {
+            contains: name,
+          }
         }
       },
       include: {
@@ -70,8 +71,10 @@ class RefundsController {
     // Obter total de registros para calcular o número de páginas
     const totalRecords = await prisma.refund.count({
       where: {
-        name: {
-          contains: name,
+        user: {
+          name: {
+            contains: name,
+          }
         }
       },
     })
@@ -95,7 +98,7 @@ class RefundsController {
 
     const { id } = paramsSchema.parse(request.params)
 
-    const refund = await prisma.refund.findMany({
+    const refund = await prisma.refund.findUnique({
       where: {
         id,
       },

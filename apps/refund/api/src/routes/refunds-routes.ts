@@ -13,7 +13,7 @@ refundsRoutes.post(
 
 refundsRoutes.get(
   "/",
-  verifyUserAuthorization(["employee"]),
+  verifyUserAuthorization(["manager"]),
   refundsController.index,
 );
 

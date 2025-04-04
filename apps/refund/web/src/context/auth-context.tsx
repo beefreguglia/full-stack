@@ -43,13 +43,16 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   function loadUser() {
     const user = localStorage.getItem(`${LOCAL_STORAGE_KEY}:user`);
     const token = localStorage.getItem(`${LOCAL_STORAGE_KEY}:token`);
+    
+    if (user && token) { 
+      api.defaults.headers.common["Authorization"] = `Bearer ${JSON.parse(token)}`;
 
-    if (user && token) {
       setSession({
-        token,
+        token: JSON.parse(token),
         user: JSON.parse(user),
       });
     }
+  
     setIsLoading(false);
   }
 
